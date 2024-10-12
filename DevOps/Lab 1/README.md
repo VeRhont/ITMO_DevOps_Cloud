@@ -35,11 +35,11 @@
 
 ![test_site_2_conf](media/test_site_2_conf.png)
 
-Чтобы Nginx обслуживал наши сайты, нужно создать символические ссылки на файлы конфигурации `test_site_1` и `test_site_2` в /etc/nginx/sites-enabled/
+Чтобы Nginx обслуживал наши сайты, нужно создать символические ссылки на файлы конфигурации `test_site_1` и `test_site_2` в `/etc/nginx/sites-enabled/`
 
-![символические ссылки](media/Символические_ссылки.png)
+![символические_ссылки](media/Символические_ссылки.png)
 
-Запускаем ... И ничего не работает. Нужно добавить DNS
+Запускаем ... И ничего не работает. Нужно добавить хосты
 
 ![DNS](media/add_ip.png)
 
@@ -56,7 +56,7 @@
 ### 3. Настройка HTTPS подключения
 
 Чтобы сгенерировать SSL сертификат, нам понадобится openssl. Установим его
-![ssl installation](media/ssl_installation.png)
+![ssl_installation](media/ssl_installation.png)
 
 Теперь сгенерируем сам сертификат
 ![Certificate](media/certificate_generation.png)
@@ -79,7 +79,7 @@
 ![updated test site 1 conf](media/updated_test_site_1_conf.png)
 ![updated test site 2 conf](media/updated_test_site_2_conf.png)
 
-![I love nginx](media/I_love_nginx.png)
+![I_love_nginx](media/I_love_nginx.png)
 
 ![Bestsite](media/bestsite.png)
 
