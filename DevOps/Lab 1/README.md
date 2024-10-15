@@ -10,38 +10,39 @@
 
 ### 1. Установка Nginx
 
-Для начала нужно установить Nginx
+Для начала установим Nginx с помощью команды `sudo apt-get install nginx`
+
 ![Installation of Nginx](media/nginx_installation.png)
 
-Теперь узнаем свой ip адрес
+Теперь узнаем свой ip адрес с помощью команды `ip addr`
+
 ![IP](media/ip_addr.png)
 
-Пробуем подключиться
+Вводим наш айпишник в строку браузера и пробуем подключиться к серверу. Nginx работает, так что можно двигаться дальше
+
 ![Welcome to Nginx](media/welcome_to_nginx.png)
 
 ---
 
 ### 2. Настройка Nginx
 
-Перейдём в директорию `/var/www`
+Перейдём в директорию `/var/www`. В ней будут храниться странички наших тестовых сайтов. Теперь создадим 2 новых папки с именами `test_site_1` и `test_site_2` и добавим в них HTML файлы c hello world
 
-Создадим 2 новых папки, в которых будут храниться странички наших сайтов
 ![test_site_1](media/mkdir.png)
 
-А теперь напишем и сами странички c hello world
+Самое время написать конфиги. Перейдём в директорию `/etc/nginx/sites-available` и создадим там 2 файла с конфигурациями `test_site_1` и `test_site_2`
 
-Самое время написать конфиги 
 ![test_site_1_conf](media/test_site_1_conf.png)
 
 ![test_site_2_conf](media/test_site_2_conf.png)
 
-Чтобы Nginx обслуживал наши сайты, нужно создать символические ссылки на файлы конфигурации `test_site_1` и `test_site_2` в `/etc/nginx/sites-enabled/`
+Чтобы Nginx мог обслуживать наши сайты, нужно создать символические ссылки на эти конфиги в `/etc/nginx/sites-enabled/`
 
 ![символические_ссылки](media/Символические_ссылки.png)
 
-Запускаем ... И ничего не работает. Нужно добавить хосты
+Запускаем ... И ничего не работает, страницы не найдены. Нужно добавить хосты. В файле `hosts` пропишем адреса наших сайтов
 
-![DNS](media/add_ip.png)
+![хосты](media/add_ip.png)
 
 Теперь перезагрузим Nginx командой `sudo service nginx restart` и попробуем подключиться вновь
 
@@ -79,7 +80,7 @@
 ![updated test site 1 conf](media/updated_test_site_1_conf.png)
 ![updated test site 2 conf](media/updated_test_site_2_conf.png)
 
-![I_love_nginx](media/I_love_nginx.png)
+![I_love_nginx](media/i_love_nginx.png)
 
 ![Bestsite](media/bestsite.png)
 
