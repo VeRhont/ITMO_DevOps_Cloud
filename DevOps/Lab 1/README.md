@@ -56,20 +56,23 @@
 
 ### 3. Настройка HTTPS подключения
 
-Чтобы сгенерировать SSL сертификат, нам понадобится openssl. Установим его
+Для обеспечения HTTPS соединения нам нужен SSL сертификат. Чтобы сгенерировать его, установим `openssl` командой `sudo apt-get install openssl`
+
 ![ssl_installation](media/ssl_installation.png)
 
 Теперь сгенерируем сам сертификат
+
 ![Certificate](media/certificate_generation.png)
 
-Перепишем наши старые конфиги, добавив в них перенаправление с порта 80 на порт 443 
+Перепишем наши старые конфиги, добавив в них перенаправление с порта 80 на порт 443. Указываем расположение сертификата и ключа 
+
 ![new test_site_1 conf](media/new_test_site_2.png)
 ![new test_site_2 conf](media/new_test_site_1.png)
 
-Попробуем подключиться. Браузер выдаёт предупреждение. Не обращаем внимания и подключаемся
-![new test_site_1 conf](media/new_test_site_2.png)
+Попробуем подключиться. Браузер выдаёт предупреждение, но мы не обращаем внимания и подключаемся
 
-Теперь HTTPS. Ура
+Теперь установлено безопасное соединение по HTTPS. Ура!
+
 ![test_site_1 url](media/site_1_url.png)
 ![test_site_2 url](media/site_2_url.png)
 
@@ -77,17 +80,25 @@
 
 ### 4. Добавление alias 
 
+В директории `/var/www/test_site_1` создаём ещё одну папку `nested_test_site_1`. Добавляем в неё HTML файлик с картинкой. В файле конфиге создаём путь `random_url`, в котором будет находиться наша новая директория
+
 ![updated test site 1 conf](media/updated_test_site_1_conf.png)
-![updated test site 2 conf](media/updated_test_site_2_conf.png)
+
+Теперь, перейдя по `random_url/index.html`, мы можем увидеть наш сайт
 
 ![I_love_nginx](media/i_love_nginx.png)
 
+Аналогичным образом поступаем и для второго сайта
+
+![updated test site 2 conf](media/updated_test_site_2_conf.png)
+
 ![Bestsite](media/bestsite.png)
 
+Как видим, alias работает
 
 ---
 
 ## Вывод
-Все пункты из задания были выполнены. В качестве проектов были использованы простые html странички с текстом. 
+Все пункты из задания были выполнены
 
 ##### Работу выполнил Иванов Семён
