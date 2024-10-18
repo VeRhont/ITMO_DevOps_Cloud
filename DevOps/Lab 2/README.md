@@ -46,7 +46,15 @@ FROM python:latest
 ```Dockerfile
 FROM python:3.13-slim
 
-# TODO
+WORKDIR /app
+
+COPY /main.py .
+
+RUN useradd -ms /bin/bash newuser
+
+USER newuser
+
+CMD ["python3", "main.py"]
 ```
 
 Теперь снова запустим контейнер, чтобы убедиться, что своими улучшениями мы ничего не сломали
@@ -54,10 +62,11 @@ FROM python:3.13-slim
 [result2](/media/result2.png)
 
 ### Почему так делать надо:
-1. ...
-2. ...
-3. ...
-4. ...
+1. **Использование конкретной версии**
+2. **Использование рабочей директории**
+3. **Копирование только нужных файлов**
+4. **Использование user без root прав**
+5. **Запуск через CMD exec**
 
 ---
 
