@@ -91,7 +91,7 @@ jobs:
     strategy:
       matrix:
         python-version: [ 3.11.5 ]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: checkout repo content
         uses: actions/checkout@v4
@@ -112,7 +112,7 @@ jobs:
         run: python main.py
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: build
     steps:
       - name: checkout repo content
@@ -122,7 +122,7 @@ jobs:
           python test.py
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: test
     steps:
       - name: checkout repo content
@@ -154,6 +154,7 @@ jobs:
 4. Секрет хранится безопасно и больше никто не сможет его украсть
 5. Использование новых версий `actions/checkout@v4`, `actions/setup-python@v5`, `ad-m/github-push-action@v0.8.0` обеспечит стабильную работу программы
 6. Использована strategy: `matrix: python-version [ 3.11.5 ]`. Это позволит избежать ошибок из-за несостыковок версий
+7. Указана конкретная версия OS
 
 ---
 
