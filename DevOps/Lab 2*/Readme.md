@@ -7,32 +7,72 @@
 - [x] После предыдущих пунктов в хорошем файле настроить сервисы так, чтобы контейнеры в рамках этого compose-проекта так же поднимались вместе, но не "видели" друг друга по сети. В отчете описать, как этого добились и кратко объяснить принцип такой изоляции
 
 ---
+### 0. Установка Docker Compose
 
+Сначала нужно установить Docker Compose на нашу машину. Для этого воспользуемся следующими командами
+
+```
+sudo apt update
+sudo apt install docker-compose
+```
+
+---
 ### 1. Плохой Docker Compose файл
 
 ```YAML
 version: '3.8'
+
 services:
-  
+    app:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+        depends_on:
+            - db
+    db:
+        image: mysql:latest
+        environment:
+            MYSQL_ROOT_PASSWORD: 1234
+        ports:
+            - "3306:3306"
 
 ```
 
-### Почему так делать не надо:
+`Dockerfile` для `app` будет выглядеть так:
+```Dockerfile
+FROM python:3.13-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY /main.py .
+CMD ["python", "main.py"]
+```
+Сделаем билд `sudo docker-compose build` и запустим `sudo docker-compose up`
 
-1. -
-2. -
-3. -
+
+
+### Почему так делать плохо:
+
+1. Использование тега `:latest` может привести к непредсказуемому поведению, потому что последние версии могут быть нестабильными
+2. Хардкодить пароль от базы данных в код очень плохая идея с точки зрения безопасности
+3. Запуск контейнеров с привилегиями
+4. Отсутствие healthcheck, потому что `app` зависит от `db`
 
 ---
 
 ### 2. Хороший Docker Compose файл
 
 ```YAML
-services:
+version: '3.8'
 
+services:
+    app:
+        image:
+    db:
+        image:
 ```
 
-### Почему так делать надо:
+### Почему так делать хорошо:
 
 1. -
 2. -
