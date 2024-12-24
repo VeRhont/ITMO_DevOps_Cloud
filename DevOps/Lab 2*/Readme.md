@@ -23,39 +23,32 @@ sudo apt install docker-compose
 version: '3.8'
 
 services:
-    app:
-        build: 
-            context: .
-            dockerfile: Dockerfile
-        depends_on:
-            - db
     db:
         image: mysql:latest
         environment:
+            MYSQL_USER: 'admin'
             MYSQL_ROOT_PASSWORD: 1234
         ports:
             - "3306:3306"
+        volumes:
+            - ./app:/var/lib/mysql
+
+    app:
+        build: .
+        depends_on:
+            - db
+        privileged: true
+        volumes:
+            - ./app:/app
 
 ```
-
-`Dockerfile` для `app` будет выглядеть так:
-```Dockerfile
-FROM python:3.13-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY /main.py .
-CMD ["python", "main.py"]
-```
-Сделаем билд `sudo docker-compose build` и запустим `sudo docker-compose up`
-
-
+Запустим командой `docker-compose up -d --build`
 
 ### Почему так делать плохо:
 
 1. Использование тега `:latest` может привести к непредсказуемому поведению, потому что последние версии могут быть нестабильными
 2. Хардкодить пароль от базы данных в код очень плохая идея с точки зрения безопасности
-3. Запуск контейнеров с привилегиями
+3. Необоснованный запуск контейнера `app` с привилегиями опасен, потому что потенциальные злоумышленники могут получить контроль над системой
 4. Отсутствие healthcheck, потому что `app` зависит от `db`
 
 ---
@@ -66,22 +59,61 @@ CMD ["python", "main.py"]
 version: '3.8'
 
 services:
-    app:
-        image:
     db:
-        image:
+        image: mysql:9.1
+        environment:
+            - MYSQL_USER=/run/secrets/user
+            - MYSQL_ROOT_PASSWORD=/run/secrets/password
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./app:/var/lib/mysql
+        healthcheck:
+            test: ["CMD-SHELL", "isready"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        networks:
+            - db_network
+
+    app:
+        build: .
+        depends_on:
+          db:
+            condition: service_healthy
+        privileged: false
+        volumes:
+            - ./app:/app
+        networks:
+            - app_network
+
+secrets:
+    user:
+        file: ./secrets/user
+    password:
+        file: ./secrets/password
+
+
+networks:
+    db_network:
+        driver: bridge
+    app_network:
+        driver: bridge
+
 ```
 
 ### Почему так делать хорошо:
 
-1. -
-2. -
-3. -
+1. Указана точная версия образа. Это избавляет от неопределенного поведения
+2. Пароль теперь хранится в секретах, а это безопасно
+3. Контейнер лишен привелегий в целях безопасности
+4. Благодаря healthcheck мы можем гарантировать, что контейнеры работают корректно
 
 ---
 
 ### 3. Изоляция контейнеров
 
+Чтобы изолировать контейнеры, нужно поместить их в разные сети. В хорошем файле мы создали сети `db_network` и `app_network` и прописали их для каждого из контейнеров. 
 
 ---
 
