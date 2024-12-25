@@ -44,6 +44,8 @@ services:
 ```
 Запустим командой `docker-compose up -d --build`
 
+![Результат](media/result-1.png)
+
 ### Почему так делать плохо:
 
 1. Использование тега `:latest` может привести к непредсказуемому поведению, потому что последние версии могут быть нестабильными
@@ -69,7 +71,7 @@ services:
         volumes:
             - ./app:/var/lib/mysql
         healthcheck:
-            test: ["CMD-SHELL", "isready"]
+            test: ["CMD", "isready"]
             interval: 10s
             timeout: 5s
             retries: 5
@@ -101,6 +103,8 @@ networks:
         driver: bridge
 
 ```
+
+![Результат](media/result-2.png)
 
 ### Почему так делать хорошо:
 
